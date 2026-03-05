@@ -65,11 +65,10 @@ app.get('/calculate-bmi', (request, response) => {
 
 	// Todo: Implement unit conversions and BMI calculations.
 	let totalHeightInches = (heightFeet * 12) + heightInches
-	let BMI = (weight/(totalHeightInches)^2) * 703
+	let bmi = (weight/(totalHeightInches)^2) * 703
 	// Todo: Return BMI instead of Todo message.
 
-	response.type('text/plain')
-	response.send('Todo: Implement "/calculate-bmi"')
+	console.log("BMI:", bmi)
 })
 
 // Test a variety of functions.
