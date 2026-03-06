@@ -32,7 +32,14 @@ Add two integers on the Node.js server.<br />
 </select> = 
 <input id="sum" disabled></input><br /><br /><br />
 
-<button type="button" onclick="calculateBMI()">Calculate BMI</button>
+
+<form onsubmit="calculateBMI()" id="bmi-form">
+	Feet:         <input type="number" id="feet"><br>
+	Inches:       <input type="number" id="inches"><br>
+	Weight (lbs): <input type="number" id="lbs"><br>
+	<button type="submit">Calculate BMI</button>
+</form>
+
 <div id="bmi-result"></div>
 <br><br>
 
@@ -68,13 +75,27 @@ Add two integers on the Node.js server.<br />
 	}
 
 	async function calculateBMI() {
-		// Approximate height and weight for a man in the US. 
-		const response = await fetch('/calculate-bmi?feet=5&inches=10&lbs=186')
-		const responseText = await response.text()
-		console.log(responseText)
-		document.getElementById("bmi-result").innerHTML = responseText
-	}
+		
+			// Get input values from the HTML
+			const feet = parseInt(document.getElementById("feet"));
+			const inches = parseInt(document.getElementById("inches"));
+			const lbs = parseInt(document.getElementById("lbs"));
 
+			const fetchString = "/calculate-bmi?feet=" + feet + "&inches=" + inches + "&lbs" + lbs;
+			const response = await fetch(fetchString)
+			
+			const responseText = await response.text();
+
+			
+			document.getElementById("bmi-result").innerHTML = responseText
+			console.log(responseText);
+			
+	}
+	const form = document.getElementById('bmi-form');
+
+		form.addEventListener('submit', function (event) {
+			event.preventDefault(); // ✅ stops the page from reloading
+		});
 	addTwoIntegers()
 </script>
 </body>
