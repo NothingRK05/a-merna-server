@@ -8,37 +8,17 @@
 <h1>Accessing Node.js Server-Side Application Programming Interfaces (APIs)</h1>
 <p>Calling Node.js server-side APIs is demonstrated below.</p>
 
-<button type="button" onclick="fetchAbout()">Fetch About</button>
-<div id="fetch-about-result"></div>
-<br><br>
 
-<button type="button" onclick="fetch2Plus2()">Fetch 2plus2</button>
-<div id="fetch-2plus2-result"></div>
-<br><br>
+<label>Feet:</label>
+<input type="number" id="feet"><br>
 
-Add two integers on the Node.js server.<br />
-<select onchange="addTwoIntegers()" id="x-value">
-	<option>1</option>
-	<option>2</option>
-	<option>3</option>
-	<option>100</option>
-</select> +
+<label>Inches:</label>
+<input type="number" id="inches"><br>
 
-<select onchange="addTwoIntegers()" id="y-value">
-	<option>1</option>
-	<option>2</option>
-	<option>3</option>
-	<option>100</option>
-</select> = 
-<input id="sum" disabled></input><br /><br /><br />
+<label>Weight (lbs):</label>
+<input type="number" id="lbs"><br>
 
-
-<form onsubmit="calculateBMI()" id="bmi-form">
-	Feet:         <input type="number" id="feet"><br>
-	Inches:       <input type="number" id="inches"><br>
-	Weight (lbs): <input type="number" id="lbs"><br>
-	<button type="submit">Calculate BMI</button>
-</form>
+<button onclick="calculateBMI()">'Calculate BMI'</button>
 
 <div id="bmi-result"></div>
 <br><br>
@@ -74,29 +54,19 @@ Add two integers on the Node.js server.<br />
 		document.getElementById("sum").value = responseText
 	}
 
-	async function calculateBMI() {
-		
-			// Get input values from the HTML
-			const feet = parseInt(document.getElementById("feet"));
-			const inches = parseInt(document.getElementById("inches"));
-			const lbs = parseInt(document.getElementById("lbs"));
+	function calculateBMI() {
+			const feet = document.getElementById('feet').value;
+			const inches = document.getElementById('inches').value;
+			const lbs = document.getElementById('lbs').value;
 
-			const fetchString = "/calculate-bmi?feet=" + feet + "&inches=" + inches + "&lbs" + lbs;
-			const response = await fetch(fetchString)
-			
-			const responseText = await response.text();
+			fetch(`/calculate-bmi?feet=${feet}&inches=${inches}&lbs=${lbs}`)
+				.then(response => response.text())
+				.then(data => {
+					document.getElementById('bmi-result').innerText = "BMI: " + data;
+				});
+		}
 
-			
-			document.getElementById("bmi-result").innerHTML = responseText
-			console.log(responseText);
-			
-	}
-	const form = document.getElementById('bmi-form');
-
-		form.addEventListener('submit', function (event) {
-			event.preventDefault(); // ✅ stops the page from reloading
-		});
-	addTwoIntegers()
+	
 </script>
 </body>
 </html>

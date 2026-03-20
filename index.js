@@ -16,17 +16,8 @@ app.use(cors({ origin: '*' }))
 
 // The app.get functions below are being processed in Node.js running on the server.
 // Implement a custom About page.
-app.get('/about', (request, response) => {
-	console.log('Calling "/about" on the Node.js server.')
-	response.type('text/plain')
-	response.send('About Node.js on Azure Template.')
-})
 
-app.get('/version', (request, response) => {
-	console.log('Calling "/version" on the Node.js server.')
-	response.type('text/plain')
-	response.send('Version: '+majorVersion+'.'+minorVersion)
-})
+
 
 app.get('/api/ping', (request, response) => {
 	console.log('Calling "/api/ping"')
@@ -55,7 +46,7 @@ app.get('/add-two-integers', (request, response) => {
 // Template for calculating BMI using height in feet/inches and weight in pounds.
 app.get('/calculate-bmi', (request, response) => {
 	console.log('Calling "/calculate-bmi" on the Node.js server.')
-	var inputs = url.parse(request.url, true).query
+	const { feet, inches, lbs } = request.query
 	const heightFeet = parseInt(inputs.feet)
 	const heightInches = parseInt(inputs.inches)
 	const weight = parseInt(inputs.lbs)
@@ -63,86 +54,19 @@ app.get('/calculate-bmi', (request, response) => {
 	
 	// Todo: Implement unit conversions and BMI calculations.
 	let totalHeightInches = (heightFeet * 12) + heightInches;
-	console.log(totalHeightInches);
-	bmi = ((weight)/((totalHeightInches)^2)) * 703;
+
+	const bmi = 0
+	bmi = ((weight)/((totalHeightInches)**2)) * 703;
 	// Todo: Return BMI instead of Todo message.
 
-	console.log('Height:' + heightFeet + '\'' + heightInches + '\"')// this works 
-	console.l
+	console.log('Height:' + heightFeet + '\'' + heightInches + '\'') 
+	
 
 	response.type('text/plain')
 	response.send(bmi)
 })
 
-// Test a variety of functions.
-app.get('/test', (request, response) => {
-    // Write the request to the log. 
-    console.log(request);
-
-    // Return HTML.
-    response.writeHead(200, {'Content-Type': 'text/html'});
-    response.write('<h3>Testing Function</h3>')
-
-    // Access function from a separate JavaScript module.
-    response.write("The date and time are currently: " + dt.myDateTime() + "<br><br>");
-
-    // Show the full url from the request. 
-    response.write("req.url="+request.url+"<br><br>");
-
-    // Suggest adding something tl the url so that we can parse it. 
-    response.write("Consider adding '/test?year=2017&month=July' to the URL.<br><br>");
-    
-	// Parse the query string for values that are being passed on the URL.
-	var q = url.parse(request.url, true).query;
-    var txt = q.year + " " + q.month;
-    response.write("txt="+txt);
-
-    // Close the response
-    response.end('<h3>The End.</h3>');
-})
-
-// Return Batman as JSON.
-const batMan = {
-	"firstName":"Bruce",
-	"lastName":"Wayne",
-	"preferredName":"Batman",
-	"email":"darkknight@lewisu.edu",
-	"phoneNumber":"800-bat-mann",
-	"city":"Gotham",
-	"state":"NJ",
-	"zip":"07101",
-	"lat":"40.73",
-	"lng":"-74.17",
-	"favoriteHobby":"Flying",
-	"class":"cpsc-24700-001",
-	"room":"AS-104-A",
-	"startTime":"2 PM CT",
-	"seatNumber":"",
-	"inPerson":[
-		"Monday",
-		"Wednesday"
-	],
-	"virtual":[
-		"Friday"
-	]
-}
-
-app.get('/batman', (request, response) => {
-	console.log('Calling "/batman" on the Node.js server.')
-	response.type('application/json')
-	response.send(JSON.stringify(batMan))
-})
-
-// Load your JSON data
-const favoritePlaces = require('./FavoritePlaces.json');
-
-// Create a route that serves the JSON data
-app.get('/api/favorite-places', (req, res) => {
-  res.json(favoritePlaces);
-});
-
-
-
+//
 // Custom 404 page.
 app.use((request, response) => {
   response.type('text/plain')
